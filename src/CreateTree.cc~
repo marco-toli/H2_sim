@@ -1,0 +1,206 @@
+#include "CreateTree.hh"
+
+CreateTree* CreateTree::fInstance = NULL;
+
+using namespace std;
+
+CreateTree::CreateTree(TString name,Bool_t hits,Bool_t absorptions)
+{
+	if(fInstance) 
+	{
+    		return;
+  	}
+
+  	this->HITS=hits;
+  	this->ABSORPTIONS=absorptions;
+
+  	this->fInstance = this;
+  	this->fname = name;
+  	this->ftree = new TTree("tree","name");
+ 
+  	this->GetTree()->Branch("Run",&this->Run,"Run/I");
+  	this->GetTree()->Branch("Event",&this->Event,"Event/I");
+  	this->GetTree()->Branch("Process",&this->Process,"Process/I");
+
+  
+	/*
+  	// hits
+  	this->GetTree()->Branch("MPPCNumHits",&this->MPPCNumHits,"MPPCNumHits/I");
+  	this->GetTree()->Branch("MPPCHitTime",&this->MPPCHitTime,"MPPCHitTime[MPPCNumHits]/F");
+  	if(this->HITS)
+	{
+    		this->GetTree()->Branch("MPPCHitPosX",&this->MPPCHitPosX,"MPPCHitPosX/F");
+    		this->GetTree()->Branch("MPPCHitPosY",&this->MPPCHitPosY,"MPPCHitPosY/F");
+    		this->GetTree()->Branch("MPPCHitPosZ",&this->MPPCHitPosZ,"MPPCHitPosZ/F");
+    		this->GetTree()->Branch("MPPCHitDirX",&this->MPPCHitDirX,"MPPCHitDirX/F");
+    		this->GetTree()->Branch("MPPCHitDirY",&this->MPPCHitDirY,"MPPCHitDirY/F");
+    		this->GetTree()->Branch("MPPCHitDirZ",&this->MPPCHitDirZ,"MPPCHitDirZ/F");
+  	}
+	
+	this->GetTree()->Branch("MPPCHitPhotonEnergy",&this->MPPCHitPhotonEnergy,"MPPCHitPhotonEnergy/F");
+  
+	// absorption
+  	this->GetTree()->Branch("NumBoundaryAbsorption",&this->NumBoundaryAbsorption,"NumBoundaryAbsorption/I");
+  	this->GetTree()->Branch("NumBoundaryReflection",&this->NumBoundaryReflection,"NumBoundaryReflection/I");
+  	if(this->ABSORPTIONS)
+	{
+    		this->GetTree()->Branch("BoundaryAbsorptionPosX",&this->BoundaryAbsorptionPosX,"BoundaryAbsorptionPosX/F");
+    		this->GetTree()->Branch("BoundaryAbsorptionPosY",&this->BoundaryAbsorptionPosY,"BoundaryAbsorptionPosY/F");
+    		this->GetTree()->Branch("BoundaryAbsorptionPosZ",&this->BoundaryAbsorptionPosZ,"BoundaryAbsorptionPosZ/F");
+    		this->GetTree()->Branch("BoundaryAbsorptionTime",&this->BoundaryAbsorptionTime,"BoundaryAbsorptionTime/F");
+    		this->GetTree()->Branch("BoundaryAbsorptionPhotonEnergy",&this->BoundaryAbsorptionPhotonEnergy,"BoundaryAbsorptionPhotonEnergy/F");
+
+    		this->GetTree()->Branch("BoundaryReflectionPosX",&this->BoundaryReflectionPosX,"BoundaryPosX/F");
+    		this->GetTree()->Branch("BoundaryReflectionPosY",&this->BoundaryReflectionPosY,"BoundaryPosY/F");
+    		this->GetTree()->Branch("BoundaryReflectionPosZ",&this->BoundaryReflectionPosZ,"BoundaryPosZ/F");
+    		this->GetTree()->Branch("BoundaryReflectionTime",&this->BoundaryReflectionTime,"BoundaryTime/F");
+    		this->GetTree()->Branch("BoundaryReflectionType",&this->BoundaryReflectionType,"BoundaryReflectionType/I");
+
+    		this->GetTree()->Branch("BulkAbsorptionPosX",&this->BulkAbsorptionPosX,"BulkAbsorptionPosX/F");
+    		this->GetTree()->Branch("BulkAbsorptionPosY",&this->BulkAbsorptionPosY,"BulkAbsorptionPosY/F");
+    		this->GetTree()->Branch("BulkAbsorptionPosZ",&this->BulkAbsorptionPosZ,"BulkAbsorptionPosZ/F");
+    		this->GetTree()->Branch("BulkAbsorptionTime",&this->BulkAbsorptionTime,"BulkAbsorptionTime/F");
+    		this->GetTree()->Branch("BulkAbsorptionPhotonEnergy",&this->BulkAbsorptionPhotonEnergy,"BulkAbsorptionPhotonEnergy/F");
+	}
+
+  	this->GetTree()->Branch("OptPhotonEnergy",&this->OptPhotonEnergy,"OptPhotonEnergy/F");
+  	this->GetTree()->Branch("NumBoundaryFresnelRefraction",&this->NumBoundaryFresnelRefraction,"NumBoundaryFresnelRefraction/I");
+  	this->GetTree()->Branch("NumBoundaryStepTooSmall",&this->NumBoundaryStepTooSmall,"NumBoundaryStepTooSmall/I");
+  	this->GetTree()->Branch("NumBoundaryFresnelReflection",&this->NumBoundaryFresnelReflection,"NumBoundaryFresnelReflection/I");
+  	this->GetTree()->Branch("NumBoundaryLobeReflection",&this->NumBoundaryLobeReflection,"NumBoundaryLobeReflection/I");
+  	this->GetTree()->Branch("NumBoundarySpikeReflection",&this->NumBoundarySpikeReflection,"NumBoundarySpikeReflection/I");
+  	this->GetTree()->Branch("NumBoundaryTotalInternalReflection",&this->NumBoundaryTotalInternalReflection,"NumBoundaryTotalInternalReflection/I");
+  	this->GetTree()->Branch("NumBoundaryLambertianReflection",&this->NumBoundaryLambertianReflection,"NumBoundaryLambertianReflection/I");
+  	this->GetTree()->Branch("NumBoundaryBackScattering",&this->NumBoundaryBackScattering,"NumBoundaryBackScattering/I");
+
+  	this->GetTree()->Branch("ScintillationYield",&this->ScintillationYield,"ScintillationYield/F");
+  	this->GetTree()->Branch("RiseTime",&this->RiseTime,"RiseTime/F"); 
+  	this->GetTree()->Branch("Reflectivity",&this->Reflectivity,"Reflectivity/F");
+  	this->GetTree()->Branch("CrystalLength",&this->CrystalLength,"CrystalLength/F");
+  	this->GetTree()->Branch("CrystalDiameter",&this->CrystalDiameter,"CrystalDiameter/F");
+  	this->GetTree()->Branch("CrystalX",&this->CrystalX,"CrystalX/F");
+  	this->GetTree()->Branch("CrystalY",&this->CrystalY,"CrystalY/F");   
+  	this->GetTree()->Branch("Gap",&this->Gap,"Gap/F");
+  	this->GetTree()->Branch("GapMaterial",&this->GapMaterial,"GapMaterial/F");
+  	this->GetTree()->Branch("GapRefIndex",&this->GapRefIndex,"GapRefIndex/F");
+  	this->GetTree()->Branch("AbsLength",&this->AbsLength,"AbsLength/F");
+  
+  	this->GetTree()->Branch("Shape",&this->Shape,"Shape/F");
+  	this->GetTree()->Branch("Readout",&this->Readout,"Readout/F");
+  
+  	this->GetTree()->Branch("ScMaterial",&this->ScMaterial,"ScMaterial/F");
+     
+  	this->GetTree()->Branch("DOI",&this->DOI,"DOI/F");
+  	this->GetTree()->Branch("zPhotCompt",&this->zPhotCompt,"zPhotCompt/F");
+  	this->GetTree()->Branch("zeIoni",&this->zeIoni,"zeIoni/F");
+  	this->GetTree()->Branch("zScint",&this->zScint,"zScint/F");
+
+  	this->GetTree()->Branch("ReflBackside",&this->ReflBackside,"ReflBackside/I");
+
+  	this->GetTree()->Branch("NumProcess",&this->NumProcess,"NumProcess/I");
+  	this->GetTree()->Branch("EProcessStart",&this->EProcessStart,"EProcessStart/F");
+  	this->GetTree()->Branch("EProcessFinal",&this->EProcessFinal,"EProcessFinal/F");
+  	this->GetTree()->Branch("IDProcess",&this->IDProcess,"IDProcess/I");
+  	this->GetTree()->Branch("DOIProcess",&this->DOIProcess,"DOIProcess/F");
+
+  	this->GetTree()->Branch("AirLayer",&this->AirLayer,"AirLayer/I");
+  	this->GetTree()->Branch("AirGap",&this->AirGap,"AirGap/F");
+  	this->GetTree()->Branch("AirLayerSigmaAlpha",&this->AirLayerSigmaAlpha,"AirLayerSigmaAlpha/F");
+
+  	this->GetTree()->Branch("gammax",&this->gammax,"gammax/F");
+  	this->GetTree()->Branch("gammay",&this->gammay,"gammay/F");
+  	this->GetTree()->Branch("gammaz",&this->gammaz,"gammaz/F");
+  	
+  	*/
+
+  	// electrons/gammas
+  	this->GetTree()->Branch("PartNum",&this->PartNum,"PartNum/I");
+  	this->GetTree()->Branch("PartID",&this->PartID,"PartID/I");
+  	this->GetTree()->Branch("PartProcess",&this->PartProcess,"PartProcess/I");
+  	this->GetTree()->Branch("PartIDParent",&this->PartIDParent,"PartIDParent/I");
+  	this->GetTree()->Branch("PartEn",&this->PartEn,"PartEn/F");
+  	this->GetTree()->Branch("PartType",&this->PartType,"PartType/I");
+	
+  	this->GetTree()->Branch("TestI",&this->TestI,"TestI/I");
+  	this->GetTree()->Branch("TestF",&this->TestF,"TestF/F");
+
+
+	this->GetTree()->Branch("InitialPositionX",&this->InitialPositionX,"InitialPositionX/F");
+	this->GetTree()->Branch("InitialPositionY",&this->InitialPositionY,"InitialPositionY/F");
+	this->GetTree()->Branch("InitialPositionZ",&this->InitialPositionZ,"InitialPositionZ/F");
+
+	this->GetTree()->Branch("depositionCounter",&this->depositionCounter,"depositionCounter/I");
+	this->GetTree()->Branch("depositionX",&this->depositionX,"depositionX/F");
+	this->GetTree()->Branch("depositionY",&this->depositionY,"depositionY/F");
+	this->GetTree()->Branch("depositionZ",&this->depositionZ,"depositionZ/F");
+	
+// 	for (int iF = 0; iF < 9; iF++) {
+	  
+	  this->GetTree()->Branch("Total_energy",&this->Total_energy,"Total_energy[9]/F");
+// 	}
+	
+	this->GetTree()->Branch("Total_energy_absorber",&this->Total_energy_absorber,"Total_energy_absorber/F");
+	this->GetTree()->Branch("Total_energy_world",&this->Total_energy_world,"Total_energy_world/F");
+
+
+
+  	this->Clear();
+}
+
+CreateTree::~CreateTree()
+{
+
+}
+
+Bool_t CreateTree::Write()
+{
+  	TString filename = this->GetName();
+  	filename+=".root";
+  	TFile* file = new TFile(filename,"RECREATE");
+  	this->GetTree()->Write();
+  	file->Write();
+  	file->Close();
+  	return true;
+}
+
+void CreateTree::Clear()
+{
+  	Run=0;
+  	Event=0;
+  	Process=0;
+
+  	zPhotCompt=-999;
+  	zeIoni=-999;
+  	zScint=-999;
+
+  	DOI=-1;
+  	TestI=0;
+  	TestF=0;
+/*
+  	NumBoundaryAbsorption=0;
+  	NumBoundaryReflection=0;
+  	NumBoundaryStepTooSmall=0;
+  	NumBoundaryFresnelRefraction=0;
+
+  	NumBoundaryFresnelReflection=0;
+  	NumBoundaryLobeReflection=0;
+  	NumBoundarySpikeReflection=0;
+  	NumBoundaryTotalInternalReflection=0;
+  	NumBoundaryLambertianReflection=0;
+  	NumBoundaryBackScattering=0;*/
+
+  	NumProcess=0;
+	depositionCounter=0;
+  	PartNum=0;
+	
+	for (int iF = 0; iF < 9; iF++) {
+	  Total_energy[iF] = 0;
+	  
+	}
+	
+	Total_energy_absorber=0;
+	Total_energy_world=0;
+	
+
+
+}

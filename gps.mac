@@ -1,0 +1,52 @@
+# Macro file for the 
+# initialization of G4GeneralParticleSource
+
+#
+#
+/gps/energy 0.0005 GeV
+/gps/particle e-
+#/gps/particle gamma
+
+# longitudinal beam
+/gps/position 0.0 0.0 -0.2 m 
+/gps/direction 0. 0. 1.
+
+#perpendicular beam
+#/gps/position 0. 0.1 0. m
+#/gps/direction 0. 1. 0.
+
+
+# Gauss distribution in angle 
+#/gps/ang/type beam2d
+#/gps/ang/sigma_x 50. mrad
+#/gps/ang/sigma_y 50. mrad
+#/gps/ang/rot1 0. 0. -1.
+
+#/gps/pos/type Beam
+#/gps/pos/shape Circle
+#/gps/pos/sigmar 4 cm
+
+
+#/gps/pos/centre 10.0 0. 0. cm
+
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/halfx 1.5 cm
+/gps/pos/halfy 1.5 cm
+
+/gps/ang/type beam2d
+/gps/ang/sigma_x 5. mrad
+/gps/ang/sigma_y 5. mrad
+#/gps/ang/rot1 0. 0. 1.
+#/gps/pos/radius 2.2 cm
+/gps/pos/centre 0.0 0.0 0.2 m
+
+
+
+
+
+
+/run/beamOn 10
+
+
+
